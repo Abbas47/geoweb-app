@@ -1,11 +1,8 @@
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { GeoJsonLayer } from '@deck.gl/layers';
-import setMapboxAccessToken from 'react-map-gl';
 
-// Set the Mapbox token globally
-setMapboxAccessToken('pk.eyJ1IjoiYWJiYXMyNSIsImEiOiJjbTNrYmg4dmkwYTF5MnFxemJpcDF0YnEzIn0.kIKSBa34JbIn-EjydGonBA'); // Replace with your valid token
-
+// Dynamically import DeckGL and Map components
 const DeckGL = dynamic(() => import('@deck.gl/react'), { ssr: false });
 const Map = dynamic(() => import('react-map-gl').then((mod) => mod.Map), { ssr: false });
 
@@ -21,6 +18,10 @@ interface ViewState {
   pitch?: number;
   bearing?: number;
 }
+
+type ViewStateChangeEvent = {
+  viewState: ViewState;
+};
 
 export default function Home() {
   const [geoData, setGeoData] = useState<{
@@ -93,6 +94,7 @@ export default function Home() {
           initialViewState={viewState}
           mapStyle="mapbox://styles/mapbox/streets-v11"
           style={{ width: '100%', height: '100%' }}
+          mapboxAccessToken="pk.eyJ1IjoiYWJiYXMyNSIsImEiOiJjbTNrYmg4dmkwYTF5MnFxemJpcDF0YnEzIn0.kIKSBa34JbIn-EjydGonBA" // Replace with your valid token
           onMove={(evt: { viewState: ViewState }) => {
             setViewState(evt.viewState);
           }}
