@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { GeoJsonLayer } from '@deck.gl/layers';
+import { Map } from 'react-map-gl';
+import { DeckGL } from '@deck.gl/react';
+import Chat from '@/components/Chat';
 
-// Dynamically import DeckGL and Map components
-const DeckGL = dynamic(() => import('@deck.gl/react'), { ssr: false });
-const Map = dynamic(() => import('react-map-gl').then((mod) => mod.Map), { ssr: false });
-
-interface GeoJsonFeatureCollection {
+const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN;
+type GeoJsonFeatureCollection = {
   type: 'FeatureCollection';
   features: Array<any>;
 }
 
-interface ViewState {
+type ViewState = {
   longitude: number;
   latitude: number;
   zoom: number;
@@ -79,27 +79,30 @@ export default function Home() {
   }
 
   return (
-    <div>
-      <h1>Geospatial AI Application</h1>
-      <div style={{ height: '100vh' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
+      <div style={{ flex: '0 0 auto', height: '20vh', borderBottom: '1px solid #ddd', zIndex: 10, backgroundColor: '#fff', overflowY: 'auto' }}>
+        <Chat />
+      </div>
+      <div style={{ flex: '1 1 auto', height: '80vh', position: 'relative' }}>
         <DeckGL
           initialViewState={viewState}
           controller={true}
           layers={layers}
-          onViewStateChange={(params: { viewState: ViewState }) => {
+          onViewStateChange={(params: ViewStateChangeEvent) => {
             setViewState(params.viewState);
           }}
-        />
-        <Map
-          initialViewState={viewState}
-          mapStyle="mapbox://styles/mapbox/streets-v11"
-          style={{ width: '100%', height: '100%' }}
-          mapboxAccessToken="pk.eyJ1IjoiYWJiYXMyNSIsImEiOiJjbTNrYmg4dmkwYTF5MnFxemJpcDF0YnEzIn0.kIKSBa34JbIn-EjydGonBA" // Replace with your valid token
-          onMove={(evt: { viewState: ViewState }) => {
-            setViewState(evt.viewState);
-          }}
-        />
+        >
+          <Map
+            initialViewState={viewState}
+            mapboxAccessToken={MAPBOX_TOKEN}
+            mapStyle="mapbox://styles/mapbox/streets-v11"
+            onMove={(evt: { viewState: ViewState }) => {
+              setViewState(evt.viewState);
+            }}
+          />
+        </DeckGL>
       </div>
     </div>
+
   );
 }
