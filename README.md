@@ -115,6 +115,3 @@ The application will work with datasets containing:
 - "Show all points within 5km of this location."
 - "Buffer these features by 10km."
 - "Find the nearest neighbors for these points."
-
-## License
-This project is licensed under the MIT License. See the LICENSE file for details.
