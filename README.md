@@ -8,7 +8,7 @@ This project involves building a geospatial application powered by AI using tech
 2. **Interactive Visualization**: Display geospatial data and query results on a map interface using DeckGL.
 3. **AI-Driven Commands**: Use an LLM to interpret natural language commands for geospatial operations.
 
-## Assignment Structure
+## Project Strutcure
 
 ### 1. Setup and Understanding
 - Set up a NextJS project with TypeScript.
